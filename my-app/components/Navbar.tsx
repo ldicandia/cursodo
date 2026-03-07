@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+    const pathname = usePathname() || '';
 
     const navLinks = [
         { name: "Explore Courses", href: "/courses", icon: Search },

@@ -10,60 +10,17 @@ export default async function ExploreCoursesPage() {
         .select('*, profiles!courses_instructor_id_fkey(name, avatar_url)')
         .order('date', { ascending: true });
 
-    const MOCK_COURSES = [
-        {
-            id: "mock-1",
-            title: "Advanced Endodontics Masterclass: Rotary Instruments",
-            instructorName: "Dr. Elena Smith",
-            date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
-            price: 499,
-            maxStudents: 20,
-            enrolledStudents: 15,
-            imageUrl: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            id: "mock-2",
-            title: "Aesthetic Composite Restorations from A to Z",
-            instructorName: "Dr. Javier Gomez",
-            date: new Date(new Date().setDate(new Date().getDate() + 15)).toISOString(),
-            price: 299,
-            maxStudents: 30,
-            enrolledStudents: 30,
-            imageUrl: "https://images.unsplash.com/photo-1598256330419-db2468acb204?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            id: "mock-3",
-            title: "Digital Workflow in Implantology",
-            instructorName: "Dr. Sarah Chen",
-            date: new Date(new Date().setDate(new Date().getDate() + 25)).toISOString(),
-            price: 899,
-            maxStudents: 15,
-            enrolledStudents: 5,
-            imageUrl: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            id: "mock-4",
-            title: "Pediatric Dentistry: Behavioral Management",
-            instructorName: "Dr. Ahmed Hassan",
-            date: new Date(new Date().setMonth(new Date().getMonth() + 2)).toISOString(),
-            price: 350,
-            maxStudents: 25,
-            enrolledStudents: 10,
-            imageUrl: "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            id: "mock-5",
-            title: "Surgical Extractions and Bone Grafting",
-            instructorName: "Dr. Michael Rossi",
-            date: new Date(new Date().setMonth(new Date().getMonth() + 3)).toISOString(),
-            price: 600,
-            maxStudents: 12,
-            enrolledStudents: 11,
-            imageUrl: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80"
-        }
-    ];
+    const coursesWithCounts = courses && courses.length > 0
+        ? await Promise.all(courses.map(async (c) => {
+            const { count } = await supabase
+                .from('enrollments')
+                .select('*', { count: 'exact', head: true })
+                .eq('course_id', c.id);
+            return { ...c, enrolledStudents: count || 0 };
+        }))
+        : [];
 
-    const displayCourses = courses && courses.length > 0 ? courses.map(c => ({
+    const displayCourses = coursesWithCounts.map(c => ({
         id: c.id,
         title: c.title,
         instructorName: c.profiles?.name || "Unknown Instructor",
@@ -71,9 +28,9 @@ export default async function ExploreCoursesPage() {
         date: c.date,
         price: c.price,
         maxStudents: c.max_students,
-        enrolledStudents: 0,
+        enrolledStudents: c.enrolledStudents,
         imageUrl: c.image_url
-    })) : MOCK_COURSES;
+    }));
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -86,14 +43,14 @@ export default async function ExploreCoursesPage() {
 
                 <div className="flex w-full md:w-auto items-center gap-3">
                     <div className="relative w-full md:w-80">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
                         <input
                             type="text"
                             placeholder="Search courses or instructors..."
-                            className="w-full pl-10 pr-4 py-3 bg-muted/50 border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                            className="w-full pl-10 pr-4 py-3 bg-background border border-primary/20 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                         />
                     </div>
-                    <button className="flex items-center justify-center p-3 border border-border rounded-xl hover:bg-muted transition-colors text-foreground">
+                    <button className="flex items-center justify-center p-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors shadow-sm">
                         <Filter className="h-5 w-5" />
                     </button>
                 </div>

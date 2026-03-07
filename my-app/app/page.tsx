@@ -15,41 +15,17 @@ export default async function Page() {
     .order('date', { ascending: true })
     .limit(4);
 
-  // MOCK DATA for now until we have database records
-  const MOCK_COURSES = [
-    {
-      id: "mock-1",
-      title: "Advanced Endodontics Masterclass: Rotary Instruments",
-      instructorName: "Dr. Elena Smith",
-      date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
-      price: 499,
-      maxStudents: 20,
-      enrolledStudents: 15,
-      imageUrl: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: "mock-2",
-      title: "Aesthetic Composite Restorations from A to Z",
-      instructorName: "Dr. Javier Gomez",
-      date: new Date(new Date().setDate(new Date().getDate() + 15)).toISOString(),
-      price: 299,
-      maxStudents: 30,
-      enrolledStudents: 30,
-      imageUrl: "https://images.unsplash.com/photo-1598256330419-db2468acb204?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: "mock-3",
-      title: "Digital Workflow in Implantology",
-      instructorName: "Dr. Sarah Chen",
-      date: new Date(new Date().setDate(new Date().getDate() + 25)).toISOString(),
-      price: 899,
-      maxStudents: 15,
-      enrolledStudents: 5,
-      imageUrl: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&w=800&q=80"
-    }
-  ];
+  const coursesWithCounts = courses && courses.length > 0
+    ? await Promise.all(courses.map(async (c) => {
+      const { count } = await supabase
+        .from('enrollments')
+        .select('*', { count: 'exact', head: true })
+        .eq('course_id', c.id);
+      return { ...c, enrolledStudents: count || 0 };
+    }))
+    : [];
 
-  const displayCourses = courses && courses.length > 0 ? courses.map(c => ({
+  const displayCourses = coursesWithCounts.map(c => ({
     id: c.id,
     title: c.title,
     instructorName: c.profiles?.name || "Unknown Instructor",
@@ -57,9 +33,9 @@ export default async function Page() {
     date: c.date,
     price: c.price,
     maxStudents: c.max_students,
-    enrolledStudents: 0, // In real app, we'd query enrollments logic
+    enrolledStudents: c.enrolledStudents,
     imageUrl: c.image_url
-  })) : MOCK_COURSES;
+  }));
 
   const features = [
     {
@@ -163,7 +139,7 @@ export default async function Page() {
                 href="/calendar"
                 className="inline-flex px-6 py-3 bg-action-secondary text-action-secondary-foreground rounded-full font-medium hover:bg-action-secondary/80 transition-colors items-center gap-2"
               >
-                Open Full Calendar <CalendarView events={[]} /> {/* Just importing type checking */}
+                Open Full Calendar <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>

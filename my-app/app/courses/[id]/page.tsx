@@ -8,39 +8,22 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
     const { id } = await params;
     const supabase = await createClient();
 
-    // If the ID is a mock ID, we show mock data. Otherwise fetch from DB.
-    let course: any = null;
-
-    if (id.startsWith('mock-')) {
-        course = {
-            id: id,
-            title: "Advanced Endodontics Masterclass: Rotary Instruments",
-            description: "Dive deep into modern endodontic techniques. This comprehensive masterclass covers everything from diagnosis to 3D obturation using the latest rotary files. You will learn protocols for safe, efficient, and predictable root canal treatments. The course includes hands-on practice on 3D printed teeth and live patient demonstrations.",
-            date: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
-            price: 499,
-            max_students: 20,
-            image_url: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80",
-            profiles: {
-                name: "Dr. Elena Smith",
-                avatar_url: null,
-                bio: "Specialist in Endodontics with 15+ years of clinical experience and international speaker. Dedicated to evidence-based practice and teaching."
-            }
-        };
-    } else {
-        const { data } = await supabase
-            .from('courses')
-            .select('*, profiles!courses_instructor_id_fkey(name, avatar_url, bio)')
-            .eq('id', id)
-            .single();
-
-        if (data) course = data;
-    }
+    const { data: course } = await supabase
+        .from('courses')
+        .select('*, profiles!courses_instructor_id_fkey(name, avatar_url, bio)')
+        .eq('id', id)
+        .single();
 
     if (!course) {
         notFound();
     }
 
-    const enrolledCount = id.startsWith('mock-') ? 15 : 0; // Mock enrollment count
+    let enrolledCount = 0;
+    const { count } = await supabase
+        .from('enrollments')
+        .select('*', { count: 'exact', head: true })
+        .eq('course_id', id);
+    enrolledCount = count || 0;
     const isSoldOut = enrolledCount >= course.max_students;
 
     return (
