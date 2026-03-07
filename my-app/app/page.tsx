@@ -58,8 +58,7 @@ export default async function Page() {
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
-      <section className="relative px-4 pt-20 pb-32 overflow-hidden bg-linear-to-br from-primary/5 via-background to-background">
-        <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02]" />
+      <section className="relative px-4 pt-20 pb-32 overflow-hidden bg-background">
 
         <div className="container mx-auto relative z-10">
           <div className="max-w-4xl mx-auto text-center space-y-8">
