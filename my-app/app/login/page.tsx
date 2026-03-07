@@ -1,7 +1,16 @@
 import Link from 'next/link';
 import { Stethoscope } from 'lucide-react';
+import { login } from './actions';
 
-export default function LoginPage() {
+export default async function LoginPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const params = await searchParams;
+    const error = params.error as string | undefined;
+    const message = params.message as string | undefined;
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
             <div className="w-full max-w-md space-y-8 bg-card border rounded-3xl p-8 sm:p-10 shadow-xl">
@@ -17,7 +26,17 @@ export default function LoginPage() {
                     </p>
                 </div>
 
-                <form className="space-y-6 flex flex-col pt-4">
+                <form className="space-y-6 flex flex-col pt-4" action={login}>
+                    {error && (
+                        <div className="p-3 text-sm text-center text-red-500 bg-red-100 rounded-xl">
+                            {error}
+                        </div>
+                    )}
+                    {message && (
+                        <div className="p-3 text-sm text-center text-green-600 bg-green-100 rounded-xl">
+                            {message}
+                        </div>
+                    )}
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1">
@@ -29,7 +48,7 @@ export default function LoginPage() {
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
                                 placeholder="doctor@example.com"
                             />
                         </div>
@@ -49,14 +68,14 @@ export default function LoginPage() {
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
                                 placeholder="••••••••"
                             />
                         </div>
                     </div>
 
                     <button
-                        type="button"
+                        type="submit"
                         className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-primary-foreground bg-primary hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all"
                     >
                         Sign in

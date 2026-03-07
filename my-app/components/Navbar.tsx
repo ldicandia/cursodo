@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Stethoscope, Calendar, Search, LogIn, Menu, X } from "lucide-react";
+import { Stethoscope, Calendar, Search, LogIn, Menu, X, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { User } from "@supabase/supabase-js";
+import { signOutAction } from "@/app/auth/actions";
 
-export function Navbar() {
+export function Navbar({ user }: { user: User | null }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const pathname = usePathname() || '';
 
@@ -47,13 +49,29 @@ export function Navbar() {
                         </div>
 
                         <div className="flex items-center gap-4">
-                            <Link href="/login" className="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-2">
-                                <LogIn className="h-4 w-4" />
-                                Sign In
-                            </Link>
-                            <Link href="/signup" className="bg-action text-action-foreground hover:bg-action/90 px-4 py-2 rounded-full text-sm font-medium transition-transform hover:scale-105 active:scale-95 shadow-sm shadow-action/20">
-                                Join Now
-                            </Link>
+                            {user ? (
+                                <>
+                                    <Link href="/profile" className="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-2">
+                                        <UserIcon className="h-4 w-4" />
+                                        Profile
+                                    </Link>
+                                    <form action={signOutAction}>
+                                        <button type="submit" className="bg-destructive/20 text-destructive-foreground hover:bg-destructive/30 px-4 py-2 rounded-full text-sm font-medium transition-transform shadow-sm">
+                                            Sign Out
+                                        </button>
+                                    </form>
+                                </>
+                            ) : (
+                                <>
+                                    <Link href="/login" className="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-2">
+                                        <LogIn className="h-4 w-4" />
+                                        Sign In
+                                    </Link>
+                                    <Link href="/signup" className="bg-action text-action-foreground hover:bg-action/90 px-4 py-2 rounded-full text-sm font-medium transition-transform hover:scale-105 active:scale-95 shadow-sm shadow-action/20">
+                                        Join Now
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -93,12 +111,27 @@ export function Navbar() {
                                 </Link>
                             ))}
                             <div className="flex flex-col gap-3 mt-4">
-                                <Link href="/login" className="w-full py-3 text-center rounded-xl bg-action-secondary text-action-secondary-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
-                                    Sign In
-                                </Link>
-                                <Link href="/signup" className="w-full py-3 text-center rounded-xl bg-action text-action-foreground font-medium shadow-sm shadow-action/20" onClick={() => setIsMobileMenuOpen(false)}>
-                                    Create Account
-                                </Link>
+                                {user ? (
+                                    <>
+                                        <Link href="/profile" className="w-full py-3 text-center rounded-xl bg-secondary/10 text-secondary font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                                            Profile
+                                        </Link>
+                                        <form action={signOutAction} className="w-full">
+                                            <button type="submit" className="w-full py-3 text-center rounded-xl bg-destructive/10 text-destructive font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                                                Sign Out
+                                            </button>
+                                        </form>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Link href="/login" className="w-full py-3 text-center rounded-xl bg-action-secondary text-action-secondary-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                                            Sign In
+                                        </Link>
+                                        <Link href="/signup" className="w-full py-3 text-center rounded-xl bg-action text-action-foreground font-medium shadow-sm shadow-action/20" onClick={() => setIsMobileMenuOpen(false)}>
+                                            Create Account
+                                        </Link>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </motion.div>

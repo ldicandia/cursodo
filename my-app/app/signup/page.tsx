@@ -1,7 +1,15 @@
 import Link from 'next/link';
 import { Stethoscope } from 'lucide-react';
+import { signup } from './actions';
 
-export default function SignupPage() {
+export default async function SignupPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const params = await searchParams;
+    const error = params.error as string | undefined;
+
     return (
         <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-muted/30 px-4 py-12">
             <div className="w-full max-w-lg space-y-8 bg-card border rounded-3xl p-8 sm:p-10 shadow-xl">
@@ -17,18 +25,27 @@ export default function SignupPage() {
                     </p>
                 </div>
 
-                <form className="space-y-6 flex flex-col pt-2">
+                <form className="space-y-6 flex flex-col pt-2" action={signup}>
+                    {error && (
+                        <div className="p-3 text-sm text-center text-red-500 bg-red-100 rounded-xl">
+                            {error}
+                        </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-4">
-                        <label className="flex flex-col items-center justify-center border-2 border-primary/20 bg-primary/5 rounded-2xl p-4 cursor-pointer hover:border-primary hover:bg-primary/10 transition-colors">
-                            <input type="radio" name="role" value="student" className="sr-only" defaultChecked />
-                            <span className="font-bold text-foreground">Student</span>
-                            <span className="text-xs text-muted-foreground mt-1 text-center">I want to learn</span>
+                        <label className="cursor-pointer relative group">
+                            <input type="radio" name="role" value="student" className="peer sr-only" defaultChecked />
+                            <div className="flex flex-col items-center justify-center border-2 border-primary/20 bg-background peer-checked:border-primary peer-checked:bg-primary/5 rounded-2xl p-4 group-hover:border-primary/50 group-hover:bg-primary/5 transition-colors h-full">
+                                <span className="font-bold text-foreground">Student</span>
+                                <span className="text-xs text-muted-foreground mt-1 text-center">I want to learn</span>
+                            </div>
                         </label>
-                        <label className="flex flex-col items-center justify-center border-2 border-border bg-background rounded-2xl p-4 cursor-pointer hover:border-primary/50 transition-colors">
-                            <input type="radio" name="role" value="dentist" className="sr-only" />
-                            <span className="font-bold text-foreground">Instructor</span>
-                            <span className="text-xs text-muted-foreground mt-1 text-center">I want to teach</span>
+                        <label className="cursor-pointer relative group">
+                            <input type="radio" name="role" value="dentist" className="peer sr-only" />
+                            <div className="flex flex-col items-center justify-center border-2 border-border bg-background peer-checked:border-primary peer-checked:bg-primary/5 rounded-2xl p-4 group-hover:border-primary/50 group-hover:bg-primary/5 transition-colors h-full">
+                                <span className="font-bold text-foreground">Instructor</span>
+                                <span className="text-xs text-muted-foreground mt-1 text-center">I want to teach</span>
+                            </div>
                         </label>
                     </div>
 
@@ -42,7 +59,7 @@ export default function SignupPage() {
                                 name="name"
                                 type="text"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
                                 placeholder="Dr. John Doe"
                             />
                         </div>
@@ -56,7 +73,7 @@ export default function SignupPage() {
                                 name="email"
                                 type="email"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
                                 placeholder="john@example.com"
                             />
                         </div>
@@ -70,14 +87,14 @@ export default function SignupPage() {
                                 name="password"
                                 type="password"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
                                 placeholder="••••••••"
                             />
                         </div>
                     </div>
 
                     <button
-                        type="button"
+                        type="submit"
                         className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-primary-foreground bg-primary hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all"
                     >
                         Create Account
