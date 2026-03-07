@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  /* 1. Fondos y Estructura */
+  --color-background: #ffffff;
+  --color-surface-secondary: #f7fafc;
+  --color-border: #e2e8f0;
+
+  /* 2. Tipografía */
+  --color-foreground: #2d3748;
+  --color-muted-foreground: #718096;
+
+  /* 3. Identidad y Navegación */
+  --color-primary: #1a365d;
+  --color-secondary: #319795;
+
+  /* 4. Botones y Llamados a la Acción */
+  --color-action: #ed8936;
+  --color-action-foreground: #ffffff;
+  --color-action-secondary: #edf2f7;
+  --color-action-secondary-foreground: #1a365d;
+
+  /* 5. Colores de Estado */
+  --color-success: #48bb78;
+  --color-destructive: #e53e3e;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --color-card: #ffffff;
+  --color-card-foreground: #2d3748;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #2d3748;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a202c;
+    --foreground: #f7fafc;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
