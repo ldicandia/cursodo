@@ -52,6 +52,10 @@ export function Navbar({ user }: { user: User | null }) {
                         <div className="flex items-center gap-4">
                             {user ? (
                                 <>
+                                    <Link href={user.user_metadata?.role === 'dentist' ? '/dashboard/instructor' : '/dashboard/student'} className="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-2">
+                                        <Menu className="h-4 w-4" />
+                                        Dashboard
+                                    </Link>
                                     <Link href="/profile" className="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-2">
                                         <UserIcon className="h-4 w-4" />
                                         Profile
@@ -114,6 +118,9 @@ export function Navbar({ user }: { user: User | null }) {
                             <div className="flex flex-col gap-3 mt-4">
                                 {user ? (
                                     <>
+                                        <Link href={user.user_metadata?.role === 'dentist' ? '/dashboard/instructor' : '/dashboard/student'} className="w-full py-3 text-center rounded-xl bg-primary/10 text-primary font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                                            Dashboard
+                                        </Link>
                                         <Link href="/profile" className="w-full py-3 text-center rounded-xl bg-secondary/10 text-secondary font-medium" onClick={() => setIsMobileMenuOpen(false)}>
                                             Profile
                                         </Link>

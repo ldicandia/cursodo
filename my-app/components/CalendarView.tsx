@@ -84,7 +84,7 @@ export function CalendarView({ events, onDateSelect }: CalendarViewProps) {
                                 } ${onDateSelect ? "cursor-pointer hover:bg-muted/50" : ""}`}
                         >
                             <div className="flex justify-between items-start">
-                                <span className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full ${isToday ? "bg-primary text-primary-foreground" : "text-foreground group-hover:bg-muted"
+                                <span className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full ${isToday ? "bg-primary text-white" : "text-foreground group-hover:bg-muted"
                                     }`}>
                                     {format(day, "d")}
                                 </span>
