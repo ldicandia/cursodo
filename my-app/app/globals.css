@@ -3,30 +3,33 @@
 @theme {
   /* 1. Fondos y Estructura */
   --color-background: #ffffff;
-  --color-surface-secondary: #f7fafc;
+  --color-surface-secondary: #f8fafc;
   --color-border: #e2e8f0;
 
   /* 2. Tipografía */
-  --color-foreground: #2d3748;
-  --color-muted-foreground: #718096;
+  --color-foreground: #0f172a;
+  --color-muted-foreground: #64748b;
 
-  /* 3. Identidad y Navegación */
-  --color-primary: #1a365d;
-  --color-secondary: #319795;
+  /* 3. Identidad y Navegación (Trust & Authority) */
+  --color-primary: #0ea5e9;
+  /* Fresh Blue */
+  --color-secondary: #10b981;
+  /* Emerald Green (success/growth) */
 
   /* 4. Botones y Llamados a la Acción */
-  --color-action: #ed8936;
+  --color-action: #f59e0b;
+  /* Amber */
   --color-action-foreground: #ffffff;
-  --color-action-secondary: #edf2f7;
-  --color-action-secondary-foreground: #1a365d;
+  --color-action-secondary: #f1f5f9;
+  --color-action-secondary-foreground: #0ea5e9;
 
   /* 5. Colores de Estado */
-  --color-success: #48bb78;
-  --color-destructive: #e53e3e;
+  --color-success: #10b981;
+  --color-destructive: #ef4444;
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --color-card: #ffffff;
-  --color-card-foreground: #2d3748;
+  --color-card-foreground: #0f172a;
 
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
@@ -39,8 +42,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1a202c;
-    --foreground: #f7fafc;
+    --background: #f0f9ff;
+    /* Very soft light blue */
+    --foreground: #0f172a;
   }
 }
 

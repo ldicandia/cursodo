@@ -28,8 +28,9 @@ export function CourseCard({
     const isSouldOut = enrolledStudents >= maxStudents;
 
     return (
-        <div className="group relative bg-card border border-border/50 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+        <div className="group relative bg-card border border-border/60 rounded-2xl overflow-hidden shadow-sm hover:shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 ease-out flex flex-col hover:-translate-y-1">
             {/* Image Section */}
+
             <div className="relative aspect-video w-full overflow-hidden bg-muted">
                 {imageUrl ? (
                     <img

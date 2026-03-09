@@ -7,6 +7,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { User } from "@supabase/supabase-js";
 import { signOutAction } from "@/app/auth/actions";
+import { GlowingButton } from "@/components/ui/glowing-button";
 
 export function Navbar({ user }: { user: User | null }) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -67,9 +68,9 @@ export function Navbar({ user }: { user: User | null }) {
                                         <LogIn className="h-4 w-4" />
                                         Sign In
                                     </Link>
-                                    <Link href="/signup" className="bg-action text-action-foreground hover:bg-action/90 px-4 py-2 rounded-full text-sm font-medium transition-transform hover:scale-105 active:scale-95 shadow-sm shadow-action/20">
+                                    <GlowingButton href="/signup" variant="primary" size="sm">
                                         Join Now
-                                    </Link>
+                                    </GlowingButton>
                                 </>
                             )}
                         </div>
@@ -127,9 +128,11 @@ export function Navbar({ user }: { user: User | null }) {
                                         <Link href="/login" className="w-full py-3 text-center rounded-xl bg-action-secondary text-action-secondary-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
                                             Sign In
                                         </Link>
-                                        <Link href="/signup" className="w-full py-3 text-center rounded-xl bg-action text-action-foreground font-medium shadow-sm shadow-action/20" onClick={() => setIsMobileMenuOpen(false)}>
-                                            Create Account
-                                        </Link>
+                                        <div onClick={() => setIsMobileMenuOpen(false)}>
+                                            <GlowingButton href="/signup" variant="primary" size="md" className="w-full">
+                                                Create Account
+                                            </GlowingButton>
+                                        </div>
                                     </>
                                 )}
                             </div>

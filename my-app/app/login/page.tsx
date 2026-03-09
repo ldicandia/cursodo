@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Stethoscope } from 'lucide-react';
 import { login } from './actions';
+import { GlowingButton } from '@/components/ui/glowing-button';
 
 export default async function LoginPage({
     searchParams,
@@ -48,7 +49,7 @@ export default async function LoginPage({
                                 type="email"
                                 autoComplete="email"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-2xl border border-border shadow-sm bg-background text-foreground focus-visible:outline-2 focus-visible:outline-primary transition-all duration-200"
                                 placeholder="doctor@example.com"
                             />
                         </div>
@@ -68,22 +69,23 @@ export default async function LoginPage({
                                 type="password"
                                 autoComplete="current-password"
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors outline-none"
+                                className="w-full px-4 py-3 rounded-2xl border border-border shadow-sm bg-background text-foreground focus-visible:outline-2 focus-visible:outline-primary transition-all duration-200"
                                 placeholder="••••••••"
                             />
                         </div>
                     </div>
 
-                    <button
+                    <GlowingButton
                         type="submit"
-                        className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-primary-foreground bg-primary hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all"
+                        variant="primary"
+                        className="w-full"
                     >
                         Sign in
-                    </button>
+                    </GlowingButton>
                 </form>
 
                 <p className="text-center text-sm text-muted-foreground mt-8">
-                    Don't have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <Link href="/signup" className="font-semibold text-primary hover:underline">
                         Register for free
                     </Link>

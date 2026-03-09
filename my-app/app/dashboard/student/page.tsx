@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { CourseCard } from '@/components/CourseCard';
 import { BookOpen, CalendarCheck } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function StudentDashboard() {
     const supabase = await createClient();
@@ -61,7 +62,7 @@ export default async function StudentDashboard() {
             ) : (
                 <div className="text-center py-24 border border-dashed rounded-2xl bg-muted/20">
                     <p className="text-muted-foreground text-lg mb-4">You are not enrolled in any courses yet.</p>
-                    <a href="/courses" className="text-primary font-semibold hover:underline">Explore courses</a>
+                    <Link href="/courses/" className="px-6 py-3 bg-action text-action-foreground font-semibold rounded-full hover:bg-action/90 transition-all flex items-center justify-center gap-2">Explore courses</Link>
                 </div>
             )}
         </div>

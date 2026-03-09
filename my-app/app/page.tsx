@@ -3,6 +3,7 @@ import { CourseCard } from '@/components/CourseCard';
 import { CalendarView } from '@/components/CalendarView';
 import { ArrowRight, Star, ShieldCheck, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { GlowingButton } from '@/components/ui/glowing-button';
 
 export default async function Page() {
   const supabase = await createClient();
@@ -71,18 +72,12 @@ export default async function Page() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link
-                href="/courses"
-                className="w-full sm:w-auto px-8 py-4 bg-action text-action-foreground rounded-full font-semibold text-lg hover:bg-action/90 transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-action/25"
-              >
+              <GlowingButton href="/courses" variant="primary" className="w-full sm:w-auto">
                 Explore Courses <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link
-                href="/login"
-                className="w-full sm:w-auto px-8 py-4 bg-action-secondary text-action-secondary-foreground rounded-full font-semibold text-lg hover:bg-action-secondary/80 transition-all flex items-center justify-center border border-transparent hover:border-border"
-              >
+              </GlowingButton>
+              <GlowingButton href="/login" variant="secondary" className="w-full sm:w-auto">
                 Become an Instructor
-              </Link>
+              </GlowingButton>
             </div>
           </div>
         </div>
@@ -134,12 +129,9 @@ export default async function Page() {
               Never miss out on a great opportunity. Our dynamic calendar lets you see all upcoming courses at a glance, allowing you to organize your clinical schedule around the education that matters most to you.
             </p>
             <div className="pt-4">
-              <Link
-                href="/calendar"
-                className="inline-flex px-6 py-3 bg-action-secondary text-action-secondary-foreground rounded-full font-medium hover:bg-action-secondary/80 transition-colors items-center gap-2"
-              >
+              <GlowingButton href="/calendar" variant="secondary">
                 Open Full Calendar <ArrowRight className="w-4 h-4" />
-              </Link>
+              </GlowingButton>
             </div>
           </div>
           <div className="lg:col-span-7">
