@@ -37,12 +37,14 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                 )}
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-transparent" />
 
-                <div className="absolute bottom-0 left-0 w-full container mx-auto px-4 pb-8">
-                    <div className="max-w-4xl max-auto space-y-4">
-                        <div className="inline-flex items-center gap-2 bg-primary/20 text-primary-foreground backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold border border-primary/30">
-                            <ShieldCheck className="w-4 h-4" /> Dental Specialist Course
+                <div className="absolute bottom-0 left-0 w-full pb-8">
+                    <div className="container mx-auto px-4">
+                        <div className="max-w-4xl space-y-4">
+                            <div className="inline-flex items-center gap-2 bg-primary/20 text-primary backdrop-blur-md px-3 py-1 rounded-full text-sm font-semibold border border-primary/30">
+                                <ShieldCheck className="w-4 h-4" /> Dental Specialist Course
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">{course.title}</h1>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">{course.title}</h1>
                     </div>
                 </div>
             </div>
@@ -133,7 +135,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                                         Sold Out
                                     </button>
                                 ) : (
-                                    <Link href={`/checkout/${course.id}`} className="block w-full text-center py-4 rounded-xl font-bold text-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/25">
+                                    <Link href={`/checkout/${course.id}`} className="block w-full text-center py-4 rounded-xl font-bold text-lg bg-primary text-white hover:bg-primary/90 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/25">
                                         Enroll Now
                                     </Link>
                                 )}

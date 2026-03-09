@@ -25,7 +25,7 @@ export function Navbar({ user }: { user: User | null }) {
                     <div className="flex items-center gap-2">
                         <Link href="/" className="flex items-center gap-2 group">
                             <div className="bg-white/10 p-2 rounded-xl group-hover:bg-white/20 transition-colors">
-                                <Stethoscope className="h-6 w-6 text-secondary" />
+                                <Stethoscope className="h-6 w-6 text-white" />
                             </div>
                             <span className="font-bold text-xl tracking-tight text-white">Cursodo</span>
                         </Link>
