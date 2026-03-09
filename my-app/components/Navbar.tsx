@@ -58,10 +58,10 @@ export function Navbar({ user }: { user: User | null }) {
                                     </Link>
                                     <Link href="/profile" className="text-sm font-medium text-white/80 hover:text-white transition-colors flex items-center gap-2">
                                         <UserIcon className="h-4 w-4" />
-                                        Profile
+                                        {user.user_metadata?.full_name || 'Profile'}
                                     </Link>
                                     <form action={signOutAction}>
-                                        <button type="submit" className="bg-destructive/20 text-destructive-foreground hover:bg-destructive/30 px-4 py-2 rounded-full text-sm font-medium transition-transform shadow-sm">
+                                        <button type="submit" className="bg-action text-white hover:bg-action/90 px-4 py-2 rounded-full text-sm font-medium transition-transform shadow-sm">
                                             Sign Out
                                         </button>
                                     </form>
@@ -122,10 +122,10 @@ export function Navbar({ user }: { user: User | null }) {
                                             Dashboard
                                         </Link>
                                         <Link href="/profile" className="w-full py-3 text-center rounded-xl bg-secondary/10 text-secondary font-medium" onClick={() => setIsMobileMenuOpen(false)}>
-                                            Profile
+                                            {user.user_metadata?.full_name || 'Profile'}
                                         </Link>
                                         <form action={signOutAction} className="w-full">
-                                            <button type="submit" className="w-full py-3 text-center rounded-xl bg-destructive/10 text-destructive font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+                                            <button type="submit" className="w-full py-3 text-center rounded-xl bg-action border border-action text-white font-medium hover:bg-action/90 transition-colors shadow-sm" onClick={() => setIsMobileMenuOpen(false)}>
                                                 Sign Out
                                             </button>
                                         </form>

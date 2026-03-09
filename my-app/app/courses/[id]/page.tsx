@@ -135,7 +135,7 @@ export default async function CourseDetailsPage({ params }: { params: Promise<{ 
                                         Sold Out
                                     </button>
                                 ) : (
-                                    <Link href={`/checkout/${course.id}`} className="block w-full text-center py-4 rounded-xl font-bold text-lg bg-primary text-white hover:bg-primary/90 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/25">
+                                    <Link href={`/checkout/${course.id}`} className="block w-full text-center py-4 rounded-xl font-bold text-lg bg-action text-white hover:bg-action/90 transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-action/25">
                                         Enroll Now
                                     </Link>
                                 )}

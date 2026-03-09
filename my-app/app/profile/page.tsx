@@ -108,7 +108,7 @@ export default async function ProfilePage({
                     <div className="flex justify-end pt-4">
                         <button
                             type="submit"
-                            className="flex justify-center py-3 px-8 border border-transparent rounded-xl shadow-sm font-bold text-white bg-primary hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all"
+                            className="flex justify-center py-3 px-8 border border-transparent rounded-xl shadow-sm font-bold text-white bg-action hover:bg-action/90 hover:scale-[1.02] active:scale-95 transition-all"
                         >
                             Save Changes
                         </button>

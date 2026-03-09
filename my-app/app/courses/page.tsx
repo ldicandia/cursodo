@@ -50,7 +50,7 @@ export default async function ExploreCoursesPage() {
                             className="w-full pl-10 pr-4 py-3 bg-background border border-primary/20 rounded-xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                         />
                     </div>
-                    <button className="flex items-center justify-center p-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors shadow-sm">
+                    <button className="flex items-center justify-center p-3 bg-action text-white rounded-xl hover:bg-action/90 transition-colors shadow-sm">
                         <Filter className="h-5 w-5" />
                     </button>
                 </div>

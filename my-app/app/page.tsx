@@ -3,7 +3,7 @@ import { CourseCard } from '@/components/CourseCard';
 import { CalendarView } from '@/components/CalendarView';
 import { ArrowRight, Star, ShieldCheck, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
-import { GlowingButton } from '@/components/ui/glowing-button';
+import { Button5 } from '@/components/ui/button-5';
 
 export default async function Page() {
   const supabase = await createClient();
@@ -72,12 +72,8 @@ export default async function Page() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <GlowingButton href="/courses" variant="primary" className="w-full sm:w-auto">
-                Explore Courses <ArrowRight className="w-5 h-5" />
-              </GlowingButton>
-              <GlowingButton href="/login" variant="secondary" className="w-full sm:w-auto">
-                Become an Instructor
-              </GlowingButton>
+              <Button5 href="/courses" text="Explore Courses" icon={<ArrowRight className="w-5 h-5" />} className="w-full sm:w-auto" />
+              <Button5 href="/login" text="Become an Instructor" className="w-full sm:w-auto" />
             </div>
           </div>
         </div>
@@ -129,9 +125,7 @@ export default async function Page() {
               Never miss out on a great opportunity. Our dynamic calendar lets you see all upcoming courses at a glance, allowing you to organize your clinical schedule around the education that matters most to you.
             </p>
             <div className="pt-4">
-              <GlowingButton href="/calendar" variant="secondary">
-                Open Full Calendar <ArrowRight className="w-4 h-4" />
-              </GlowingButton>
+              <Button5 href="/calendar" text="Open Full Calendar" icon={<ArrowRight className="w-4 h-4" />} />
             </div>
           </div>
           <div className="lg:col-span-7">

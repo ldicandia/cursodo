@@ -81,7 +81,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
                         <Link
                             href="/dashboard/student"
-                            className="w-full flex justify-center py-4 px-4 rounded-xl shadow-lg shadow-primary/25 font-bold text-lg text-white bg-primary hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition-all"
+                            className="w-full flex justify-center py-4 px-4 rounded-xl shadow-lg shadow-action/25 font-bold text-lg text-white bg-action hover:bg-action/90 hover:scale-[1.02] active:scale-95 transition-all"
                         >
                             Pay ${499} & Enroll
                         </Link>
