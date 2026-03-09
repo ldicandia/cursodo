@@ -26,8 +26,8 @@ export default async function StudentDashboard() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-white">My Learning</h1>
-                <p className="text-white/70 mt-1">Access your enrolled courses and upcoming schedule.</p>
+                <h1 className="text-3xl font-bold text-foreground">My Learning</h1>
+                <p className="text-muted-foreground mt-1">Access your enrolled courses and upcoming schedule.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -36,8 +36,8 @@ export default async function StudentDashboard() {
                         <BookOpen className="w-8 h-8" />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-white text-lg mb-1">Enrolled Courses</h3>
-                        <p className="text-3xl font-bold text-white">1</p>
+                        <h3 className="font-semibold text-foreground text-lg mb-1">Enrolled Courses</h3>
+                        <p className="text-3xl font-bold text-foreground">1</p>
                     </div>
                 </div>
 
@@ -46,13 +46,13 @@ export default async function StudentDashboard() {
                         <CalendarCheck className="w-8 h-8" />
                     </div>
                     <div>
-                        <h3 className="font-semibold text-white text-lg mb-1">Upcoming This Month</h3>
-                        <p className="text-3xl font-bold text-white">1</p>
+                        <h3 className="font-semibold text-foreground text-lg mb-1">Upcoming This Month</h3>
+                        <p className="text-3xl font-bold text-foreground">1</p>
                     </div>
                 </div>
             </div>
 
-            <h2 className="text-2xl font-bold mb-6 text-white">Upcoming Courses</h2>
+            <h2 className="text-2xl font-bold mb-6 text-foreground">Upcoming Courses</h2>
             {MOCK_ENROLLED_COURSES.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {MOCK_ENROLLED_COURSES.map(course => (
@@ -60,8 +60,8 @@ export default async function StudentDashboard() {
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-24 border border-dashed rounded-2xl bg-muted/20 border-white/20">
-                    <p className="text-white/70 text-lg mb-4">You are not enrolled in any courses yet.</p>
+                <div className="text-center py-24 border border-dashed rounded-2xl bg-muted/20 border-border">
+                    <p className="text-muted-foreground text-lg mb-4">You are not enrolled in any courses yet.</p>
                     <Link href="/courses/" className="px-6 py-3 bg-action text-action-foreground font-semibold rounded-full hover:bg-action/90 transition-all flex items-center justify-center gap-2">Explore courses</Link>
                 </div>
             )}
