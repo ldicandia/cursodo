@@ -42,7 +42,8 @@ export default async function InstructorDashboard() {
         price: c.price,
         maxStudents: c.max_students,
         enrolledStudents: c.enrolledStudents,
-        imageUrl: c.image_url
+        imageUrl: c.image_url,
+        editUrl: `/dashboard/instructor/edit/${c.id}`
     }));
 
     return (
