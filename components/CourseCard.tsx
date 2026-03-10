@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, Users, ArrowRight } from "lucide-react";
+import { Calendar, Users, ArrowRight, Edit } from "lucide-react";
 import { format } from "date-fns";
 
 interface CourseCardProps {
@@ -12,6 +12,7 @@ interface CourseCardProps {
     maxStudents: number;
     enrolledStudents: number;
     imageUrl?: string;
+    editUrl?: string;
 }
 
 export function CourseCard({
@@ -24,6 +25,7 @@ export function CourseCard({
     maxStudents,
     enrolledStudents,
     imageUrl,
+    editUrl,
 }: CourseCardProps) {
     const isSouldOut = enrolledStudents >= maxStudents;
 
@@ -42,6 +44,17 @@ export function CourseCard({
                     <div className="w-full h-full bg-linear-to-tr from-secondary/10 to-secondary/5 flex items-center justify-center">
                         <span className="text-secondary/50 font-medium">No Image</span>
                     </div>
+                )}
+
+                {/* Edit Button */}
+                {editUrl && (
+                    <Link
+                        href={editUrl}
+                        className="absolute top-4 left-4 z-20 bg-action hover:bg-action/90 text-white p-2 rounded-full shadow-md transition-colors flex items-center gap-2 group/edit"
+                    >
+                        <Edit className="w-4 h-4" />
+                        <span className="text-xs font-semibold sr-only group-hover/edit:not-sr-only group-hover/edit:pr-1">Edit Course</span>
+                    </Link>
                 )}
 
                 {/* Price Badge */}
