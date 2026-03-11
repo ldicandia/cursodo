@@ -1,7 +1,40 @@
-import Link from 'next/link';
-import { CreditCard, ShieldCheck } from 'lucide-react';
+import { createClient } from '@/utils/supabase/server';
+import { notFound, redirect } from 'next/navigation';
+import CheckoutButton from './CheckoutButton';
 
-export default function CheckoutPage({ params }: { params: { id: string } }) {
+export default async function CheckoutPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const supabase = await createClient();
+
+    // Verify user is logged in
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        redirect('/login');
+    }
+
+    const { data: course } = await supabase
+        .from('courses')
+        .select('*, profiles!courses_instructor_id_fkey(name, avatar_url, bio)')
+        .eq('id', id)
+        .single();
+
+    if (!course) {
+        notFound();
+    }
+
+    // Check if already enrolled
+    const { data: existingEnrollment } = await supabase
+        .from('enrollments')
+        .select('*')
+        .eq('course_id', id)
+        .eq('student_id', user.id)
+        .eq('payment_status', 'completed')
+        .single();
+
+    if (existingEnrollment) {
+        redirect('/dashboard/student');
+    }
+
     return (
         <div className="container mx-auto px-4 py-16 max-w-3xl">
             <div className="mb-10 text-center">
@@ -11,87 +44,26 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
             <div className="bg-card border rounded-3xl p-8 shadow-sm">
                 <div className="mb-8 p-4 bg-muted/50 rounded-2xl flex items-center gap-4">
-                    <div className="w-16 h-16 bg-primary/20 rounded-xl flex items-center justify-center shrink-0">
-                        <span className="text-2xl">🦷</span>
-                    </div>
+                    {course.image_url ? (
+                        <img src={course.image_url} alt={course.title} className="w-16 h-16 rounded-xl object-cover shrink-0" />
+                    ) : (
+                        <div className="w-16 h-16 bg-primary/20 rounded-xl flex items-center justify-center shrink-0">
+                            <span className="text-2xl">🦷</span>
+                        </div>
+                    )}
                     <div>
-                        <h3 className="font-bold text-foreground">Advanced Endodontics Masterclass: Rotary Instruments</h3>
-                        <p className="text-muted-foreground">Dr. Elena Smith • $499.00</p>
+                        <h3 className="font-bold text-foreground">{course.title}</h3>
+                        <p className="text-muted-foreground">{course.profiles.name} • ${course.price.toFixed(2)}</p>
                     </div>
                 </div>
 
-                <form className="space-y-6">
-                    <div className="space-y-4">
-                        <h3 className="text-xl font-bold">Payment Details</h3>
-
-                        <div>
-                            <label className="block text-sm font-medium text-foreground mb-1">
-                                Name on Card
-                            </label>
-                            <input
-                                type="text"
-                                className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 outline-none"
-                                placeholder="John Doe"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-foreground mb-1">
-                                Card Number
-                            </label>
-                            <div className="relative">
-                                <CreditCard className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                <input
-                                    type="text"
-                                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 outline-none"
-                                    placeholder="0000 0000 0000 0000"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-medium text-foreground mb-1">
-                                    Expiry Date
-                                </label>
-                                <input
-                                    type="text"
-                                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 outline-none"
-                                    placeholder="MM/YY"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-foreground mb-1">
-                                    CVC
-                                </label>
-                                <input
-                                    type="text"
-                                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary/50 outline-none"
-                                    placeholder="123"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="pt-6 border-t flex flex-col gap-4">
-                        <div className="flex items-center justify-between text-lg font-bold">
-                            <span>Total to Pay</span>
-                            <span>$499.00</span>
-                        </div>
-
-                        <Link
-                            href="/dashboard/student"
-                            className="w-full flex justify-center py-4 px-4 rounded-xl shadow-lg shadow-action/25 font-bold text-lg text-white bg-action hover:bg-action/90 hover:scale-[1.02] active:scale-95 transition-all"
-                        >
-                            Pay ${499} & Enroll
-                        </Link>
-
-                        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-2">
-                            <ShieldCheck className="w-4 h-4 text-green-500" />
-                            Your payment is secure and encrypted
-                        </div>
-                    </div>
-                </form>
+                <div className="space-y-6">
+                    <p className="text-muted-foreground">
+                        You will be redirected to our secure Stripe checkout to complete your payment. Promocodes can be applied on the next step.
+                    </p>
+                    
+                    <CheckoutButton courseId={course.id} price={course.price} />
+                </div>
             </div>
         </div>
     );

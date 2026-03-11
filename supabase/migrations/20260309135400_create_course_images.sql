@@ -6,12 +6,12 @@ on conflict (id) do nothing;
 
 
 -- Allow public read access on the "course-images" bucket
-create policy 'Public read access for course images'
+create policy "Public read access for course images"
   on storage.objects for select
   using ( bucket_id = 'course-images' );
 
 -- Allow authenticated "dentist" users to insert into the "course-images" bucket
-create policy 'Instructors can upload course images'
+create policy "Instructors can upload course images"
   on storage.objects for insert
   with check (
     auth.role() = 'authenticated' and
@@ -20,7 +20,7 @@ create policy 'Instructors can upload course images'
   );
 
 -- Allow instructors to update their own images
-create policy 'Instructors can update own course images'
+create policy "Instructors can update own course images"
   on storage.objects for update
   using (
     auth.role() = 'authenticated' and
@@ -29,7 +29,7 @@ create policy 'Instructors can update own course images'
   );
 
 -- Allow instructors to delete their own images
-create policy 'Instructors can delete own course images'
+create policy "Instructors can delete own course images"
   on storage.objects for delete
   using (
     auth.role() = 'authenticated' and
