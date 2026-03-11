@@ -1,16 +1,53 @@
 import { createClient } from '@/utils/supabase/server';
 import { CourseCard } from '@/components/CourseCard';
-import { BookOpen, CalendarCheck } from 'lucide-react';
+import { BookOpen, CalendarCheck, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import Stripe from 'stripe';
 
-export default async function StudentDashboard() {
+export default async function StudentDashboard(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+    const searchParams = await props.searchParams;
+    const sessionId = searchParams?.session_id as string | undefined;
     const supabase = await createClient();
 
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
         redirect('/login');
+    }
+
+    let paymentSuccess = false;
+
+    if (sessionId) {
+        try {
+            const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+                apiVersion: '2026-02-25.clover',
+            });
+            const session = await stripe.checkout.sessions.retrieve(sessionId);
+            
+            if (session.payment_status === 'paid' && session.metadata?.courseId) {
+                // Determine if we need to insert the enrollment manually (fallback to webhook)
+                const { data: existing } = await supabase
+                    .from('enrollments')
+                    .select('id')
+                    .eq('course_id', session.metadata.courseId)
+                    .eq('student_id', user.id)
+                    .single();
+
+                if (!existing) {
+                    await supabase
+                        .from('enrollments')
+                        .insert({
+                            course_id: session.metadata.courseId,
+                            student_id: user.id,
+                            payment_status: 'completed'
+                        });
+                }
+                paymentSuccess = true;
+            }
+        } catch (error) {
+            console.error('Error verifying Stripe session:', error);
+        }
     }
 
     const { data: enrollments } = await supabase
@@ -59,6 +96,12 @@ export default async function StudentDashboard() {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {paymentSuccess && (
+                <div className="mb-8 bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400 p-4 rounded-xl flex items-center gap-3">
+                    <CheckCircle2 className="w-6 h-6" />
+                    <p className="font-medium">Payment successful! You have been successfully enrolled in the course.</p>
+                </div>
+            )}
             <div className="mb-8">
                 <h1 className="text-3xl font-bold text-foreground">My Learning</h1>
                 <p className="text-muted-foreground mt-1">Access your enrolled courses and upcoming schedule.</p>
