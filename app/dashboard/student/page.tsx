@@ -2,26 +2,60 @@ import { createClient } from '@/utils/supabase/server';
 import { CourseCard } from '@/components/CourseCard';
 import { BookOpen, CalendarCheck } from 'lucide-react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function StudentDashboard() {
     const supabase = await createClient();
 
-    // In real app, fetch enrollments:
-    // const { data: enrollments } = await supabase.from('enrollments').select('courses(*)').eq('student_id', user.id);
+    const { data: { user } } = await supabase.auth.getUser();
 
-    // MOCK DATA
-    const MOCK_ENROLLED_COURSES = [
-        {
-            id: "mock-2",
-            title: "Aesthetic Composite Restorations",
-            instructorName: "Dr. Javier Gomez",
-            date: new Date(new Date().setDate(new Date().getDate() + 15)).toISOString(),
-            price: 299,
-            maxStudents: 30,
-            enrolledStudents: 30,
-            imageUrl: "https://images.unsplash.com/photo-1598256330419-db2468acb204?auto=format&fit=crop&w=400&q=80"
+    if (!user) {
+        redirect('/login');
+    }
+
+    const { data: enrollments } = await supabase
+        .from('enrollments')
+        .select(`
+            course_id,
+            courses (
+                *,
+                profiles!courses_instructor_id_fkey(name, avatar_url)
+            )
+        `)
+        .eq('student_id', user.id)
+        .eq('payment_status', 'completed');
+
+    // To get the number of enrolled students per course for the cards
+    const courseIds = enrollments?.map(e => e.course_id) || [];
+    let enrollmentsCount: Record<string, number> = {};
+
+    if (courseIds.length > 0) {
+        const { data: countsData } = await supabase
+            .from('enrollments')
+            .select('course_id')
+            .in('course_id', courseIds);
+
+        if (countsData) {
+            countsData.forEach(row => {
+                enrollmentsCount[row.course_id] = (enrollmentsCount[row.course_id] || 0) + 1;
+            });
         }
-    ];
+    }
+
+    const mappedCourses = (enrollments || []).map((e: any) => {
+        const course = Array.isArray(e.courses) ? e.courses[0] : e.courses;
+        return {
+            id: course.id,
+            title: course.title,
+            instructorName: course.profiles?.name || 'Instructor',
+            instructorAvatar: course.profiles?.avatar_url || undefined,
+            date: course.date,
+            price: course.price,
+            maxStudents: course.max_students,
+            enrolledStudents: enrollmentsCount[course.id] || 0,
+            imageUrl: course.image_url || undefined
+        };
+    });
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -37,7 +71,7 @@ export default async function StudentDashboard() {
                     </div>
                     <div>
                         <h3 className="font-semibold text-foreground text-lg mb-1">Enrolled Courses</h3>
-                        <p className="text-3xl font-bold text-foreground">1</p>
+                        <p className="text-3xl font-bold text-foreground">{mappedCourses.length}</p>
                     </div>
                 </div>
 
@@ -47,15 +81,17 @@ export default async function StudentDashboard() {
                     </div>
                     <div>
                         <h3 className="font-semibold text-foreground text-lg mb-1">Upcoming This Month</h3>
-                        <p className="text-3xl font-bold text-foreground">1</p>
+                        <p className="text-3xl font-bold text-foreground">
+                            {mappedCourses.filter(c => new Date(c.date).getMonth() === new Date().getMonth()).length}
+                        </p>
                     </div>
                 </div>
             </div>
 
             <h2 className="text-2xl font-bold mb-6 text-foreground">Upcoming Courses</h2>
-            {MOCK_ENROLLED_COURSES.length > 0 ? (
+            {mappedCourses.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {MOCK_ENROLLED_COURSES.map(course => (
+                    {mappedCourses.map(course => (
                         <CourseCard key={course.id} {...course} />
                     ))}
                 </div>
